@@ -1,0 +1,16 @@
+name: actions-wprkflow-example
+on:
+  pull_request:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Actions Example
+        run: echo "Hello World"
+      - name: Env Example
+        COMMIT_SHA: ${{github.event.name}}
+        run: echo "::set-output name-message::$(echo "${COMMIT_SHA} success.")"
+
+
