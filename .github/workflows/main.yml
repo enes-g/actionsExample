@@ -1,16 +1,33 @@
-name: actions-wprkflow-example
+name: actions-workflow-examples
 on:
+  push:
+    branches:
+      - main
   pull_request:
     branches:
       - main
+env:
+  COMMIT_SHA: ${{ github.sha }}
+  EVENT_NAME: ${{ github.event.name }}
+  GITHUB_TOKEN: ${{ github.token }}
+  ISSUE_URL: ${{ github.event.issue.html_url }}
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Actions Example
-        run: echo "Hello World"
-      - name: Env Example
-        COMMIT_SHA: ${{github.event.name}}
-        run: echo "::set-output name-message::$(echo "${COMMIT_SHA} success.")"
+        uses: actions/checkout@v3
+      - run: echo "Hello World"
+      - name: Comment PR
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: thollander/actions-comment-pull-request@v1
+        id: build-finish
+        with:
+          message: '${{steps.build-finish.outputs.message}}'
+      - name: Finish Message
+        run: |
+          echo "message=Deploy hash ${COMMIT_SHA:0:7} Token ${EVENT_NAME}"
+      - name: Build Message
+        run: if [ $? -eq 0 ]; then echo "Build success!"; else exit 1; fi
 
 
