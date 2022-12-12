@@ -13,7 +13,7 @@ env:
   ISSUE_URL: ${{ github.event.issue.html_url }}
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - name: Actions Example
         uses: actions/checkout@v3
@@ -23,10 +23,14 @@ jobs:
         uses: thollander/actions-comment-pull-request@v1
         id: build-finish
         with:
-          message: '${{steps.build-finish.outputs.message}}'
+          message: |
+            Build Success, Commit hash ${{env.COMMIT_SHA}}
+          pr_number: ${{ github.event.number }}
+          reactions: eyes, rocket
       - name: Finish Message
+        id: finish-message
         run: |
-          echo "message=Deploy hash ${COMMIT_SHA:0:7} Token ${EVENT_NAME}"
+          echo "message=Deploy hash ${COMMIT_SHA:0:7} Token ${EVENT_NAME} ISSUE ${ISSUE_URL}"
       - name: Build Message
         run: if [ $? -eq 0 ]; then echo "Build success!"; else exit 1; fi
 
