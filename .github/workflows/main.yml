@@ -8,9 +8,8 @@ on:
       - main
 env:
   COMMIT_SHA: ${{ github.sha }}
-  EVENT_NAME: ${{ github.event.name }}
-  GITHUB_TOKEN: ${{ github.token }}
-  ISSUE_URL: ${{ github.event.issue.html_url }}
+  EVENT_NAME: ${{ github.ref_name }}
+  ISSUE_URL: ${{ github.repositoryUrl }}
 jobs:
   build:
     runs-on: ubuntu-20.04
@@ -30,8 +29,6 @@ jobs:
       - name: Finish Message
         id: finish-message
         run: |
-          echo "message=Deploy hash ${COMMIT_SHA:0:7} Token ${EVENT_NAME} ISSUE ${ISSUE_URL}"
+          echo "message=Deploy hash ${COMMIT_SHA:0:7} ISSUE ${ISSUE_URL}"
       - name: Build Message
         run: if [ $? -eq 0 ]; then echo "Build success!"; else exit 1; fi
-
-
