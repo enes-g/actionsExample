@@ -29,6 +29,6 @@ jobs:
       - name: Finish Message
         id: finish-message
         run: |
-          echo "message=Deploy hash ${COMMIT_SHA:0:7} ISSUE $"{ISSUE_URL}"
+          echo "message=Deploy hash ${COMMIT_SHA:0:7} ISSUE ${ISSUE_URL}"
       - name: Build Message
         run: if [ $? -eq 0 ]; then echo "Build success!"; else exit 1; fi
